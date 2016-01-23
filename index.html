@@ -1,3 +1,29 @@
+<style type="text/css">
+  .keys {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+    height: 210px;
+    text-align: center;
+  }
+
+  .key-row { margin-bottom: 5px; }
+
+  .key {
+    width: 100px;
+    height: 100px;
+    font-size: 100px;
+    border: 1px solid black;
+    display: inline-block;
+    cursor: pointer;
+  }
+
+  .key.active { background: lightblue; }
+</style>
+
 <div class="keys">
   <div class="key-row">
     <div class="key" id="key-w" data-key-code="87">W</div>
@@ -66,29 +92,3 @@
     });
   });
 </script>
-
-<style type="text/css">
-  .keys {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    margin: auto;
-    height: 210px;
-    text-align: center;
-  }
-
-  .key-row { margin-bottom: 5px; }
-
-  .key {
-    width: 100px;
-    height: 100px;
-    font-size: 100px;
-    border: 1px solid black;
-    display: inline-block;
-    cursor: pointer;
-  }
-
-  .key.active { background: lightblue; }
-</style>

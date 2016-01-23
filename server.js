@@ -16,7 +16,7 @@ webSocketServer.on('connection', function(webSocket) {
     var parsedMessage = parseInt(message);
     if(parsedMessage) {
       console.log('from client:', parsedMessage);
-      redisClient.rpush('commands', parseInt(parsedMessage));
+      redisClient.rpush('commands', parsedMessage);
     }
   });
 });
