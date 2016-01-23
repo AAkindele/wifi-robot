@@ -13,8 +13,11 @@ app.use(express.static(__dirname));
 
 webSocketServer.on('connection', function(webSocket) {
   webSocket.on('message', function(message) {
-    console.log('from client:', message);
-    redisClient.rpush('commands', message)
+    var parsedMessage = parseInt(message);
+    if(parsedMessage) {
+      console.log('from client:', parsedMessage);
+      redisClient.rpush('commands', parseInt(parsedMessage));
+    }
   });
 });
 

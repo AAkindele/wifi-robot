@@ -9,7 +9,8 @@
   </div>
 </div>
 
-<script src="//code.jquery.com/jquery-2.2.0.min.js"></script>
+<script src="/vendor/lodash.js"></script>
+<script src="/vendor/jquery.js"></script>
 <script>
   var host = location.origin.replace(/^http/, 'ws');
   var webSocket = new WebSocket(host);
@@ -27,20 +28,34 @@
     keyMappings[KEY_S] = $('#key-s');
     keyMappings[KEY_D] = $('#key-d');
 
+    // show key as pressed. continuously send key to server
     var activate = function(keyCode) {
-      if(keyMappings[keyCode]) { keyMappings[keyCode].addClass('active'); }
+      if(keyMappings[keyCode]) {
+        keyMappings[keyCode].addClass('active');
+        webSocket.send(keyCode);
+      }
     };
+    // show key as released. stop sending key to server
     var deactivate = function(keyCode) {
-      if(keyMappings[keyCode]) { keyMappings[keyCode].removeClass('active'); }
+      if(keyMappings[keyCode]) {
+        keyMappings[keyCode].removeClass('active');
+      }
+    };
+    var throttle = function(func){
+      return _.throttle(func, 200, { trailing: false });
     };
 
     // button press handlers
-    $document.keydown(function(event){
-      activate(event.keyCode);
-    });
-    $keys.mousedown(function(event){
-      activate($(event.target).data('key-code'));
-    });
+    $document.keydown(throttle(
+      function(event){
+        activate(event.keyCode);
+      }
+    ));
+    $keys.mousedown(throttle(
+      function(event){
+        activate($(event.target).data('key-code'));
+      }
+    ));
 
     // button release handlers
     $document.keyup(function(event){
