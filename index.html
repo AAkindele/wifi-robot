@@ -1,9 +1,67 @@
-<h1>Hello, World!</h1>
+<div class="keys">
+  <div class="key-row">
+    <div class="key" id="key-w">W</div>
+  </div>
+  <div class="key-row">
+    <div class="key" id="key-a">A</div>
+    <div class="key" id="key-s">S</div>
+    <div class="key" id="key-d">D</div>
+  </div>
+</div>
 
+<script src="//code.jquery.com/jquery-2.2.0.min.js"></script>
 <script>
   var host = location.origin.replace(/^http/, 'ws');
   var webSocket = new WebSocket(host);
-  webSocket.onmessage = function (event) {
-    console.log('from server', event.data);
-  };
+  var KEY_W = 87;
+  var KEY_A = 65;
+  var KEY_S = 83;
+  var KEY_D = 68;
+
+  $(function() {
+    var keyMappings = {};
+    keyMappings[KEY_W] = $('#key-w');
+    keyMappings[KEY_A] = $('#key-a');
+    keyMappings[KEY_S] = $('#key-s');
+    keyMappings[KEY_D] = $('#key-d');
+
+    $(document).keydown(function(event){
+      var keyCode = event.keyCode;
+      if(keyMappings[keyCode]) {
+        keyMappings[keyCode].addClass('active');
+      }
+    });
+
+    $(document).keyup(function(event){
+      var keyCode = event.keyCode;
+      if(keyMappings[keyCode]) {
+        keyMappings[keyCode].removeClass('active');
+      }
+    });
+  });
 </script>
+
+<style type="text/css">
+  .keys {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+    height: 210px;
+    text-align: center;
+  }
+
+  .key-row { margin-bottom: 5px; }
+
+  .key {
+    width: 100px;
+    height: 100px;
+    font-size: 100px;
+    border: 1px solid black;
+    display: inline-block;
+  }
+
+  .key.active { background: lightblue; }
+</style>
