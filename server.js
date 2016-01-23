@@ -1,12 +1,23 @@
 var express = require('express');
+var WebSocketServer = require('ws').Server;
+var http = require('http');
 var app = express();
+var port = process.env.PORT || 5000;
+var server = http.createServer(app);
+var webSocketServer = new WebSocketServer({ server: server });
 
-app.set('port', (process.env.PORT || 5000));
+app.set('view engine', 'html');
+app.use(express.static(__dirname));
+
+webSocketServer.on("connection", function(webSocket) {
+  webSocket.on("message", function(message) {
+    console.log('from client:', message);
+    webSocket.send('echo: ' + message);
+  });
+});
 
 app.get('/', function(request, response) {
-  response.send('Hello, World!');
+  response.sendFile('index.html');
 });
 
-app.listen(app.get('port'), function() {
-  console.log('Node app is running on port', app.get('port'));
-});
+server.listen(port, function() { console.log('app is running on port', port); });
