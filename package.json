@@ -11,6 +11,6 @@
   "homepage": "https://github.com/AAkindele/wifi-robot",
   "private": true,
   "dependencies": {
-    "express": "4.13.3"
+    "express": "4.13.4"
   }
 }
