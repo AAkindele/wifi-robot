@@ -9,8 +9,8 @@ var webSocketServer = new WebSocketServer({ server: server });
 app.set('view engine', 'html');
 app.use(express.static(__dirname));
 
-webSocketServer.on("connection", function(webSocket) {
-  webSocket.on("message", function(message) {
+webSocketServer.on('connection', function(webSocket) {
+  webSocket.on('message', function(message) {
     console.log('from client:', message);
     webSocket.send('echo: ' + message);
   });

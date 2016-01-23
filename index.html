@@ -1,7 +1,7 @@
 <h1>Hello, World!</h1>
 
 <script>
-  var host = 'ws://' + location.hostname + ':' + location.port;
+  var host = location.origin.replace(/^http/, 'ws');
   var webSocket = new WebSocket(host);
   webSocket.onmessage = function (event) {
     console.log('from server', event.data);
