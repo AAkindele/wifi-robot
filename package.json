@@ -1,0 +1,16 @@
+{
+  "name": "robot-server",
+  "version": "0.0.1",
+  "description": "middle man server between user and robot",
+  "main": "server.js",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:AAkindele/wifi-robot.git"
+  },
+  "author": "aakindele",
+  "homepage": "https://github.com/AAkindele/wifi-robot",
+  "private": true,
+  "dependencies": {
+    "express": "4.13.3"
+  }
+}
