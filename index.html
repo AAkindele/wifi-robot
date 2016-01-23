@@ -1,11 +1,11 @@
 <div class="keys">
   <div class="key-row">
-    <div class="key" id="key-w">W</div>
+    <div class="key" id="key-w" data-key-code="87">W</div>
   </div>
   <div class="key-row">
-    <div class="key" id="key-a">A</div>
-    <div class="key" id="key-s">S</div>
-    <div class="key" id="key-d">D</div>
+    <div class="key" id="key-a" data-key-code="65">A</div>
+    <div class="key" id="key-s" data-key-code="83">S</div>
+    <div class="key" id="key-d" data-key-code="68">D</div>
   </div>
 </div>
 
@@ -19,24 +19,35 @@
   var KEY_D = 68;
 
   $(function() {
+    var $keys = $('.keys');
+    var $document = $(document);
     var keyMappings = {};
     keyMappings[KEY_W] = $('#key-w');
     keyMappings[KEY_A] = $('#key-a');
     keyMappings[KEY_S] = $('#key-s');
     keyMappings[KEY_D] = $('#key-d');
 
-    $(document).keydown(function(event){
-      var keyCode = event.keyCode;
-      if(keyMappings[keyCode]) {
-        keyMappings[keyCode].addClass('active');
-      }
+    var activate = function(keyCode) {
+      if(keyMappings[keyCode]) { keyMappings[keyCode].addClass('active'); }
+    };
+    var deactivate = function(keyCode) {
+      if(keyMappings[keyCode]) { keyMappings[keyCode].removeClass('active'); }
+    };
+
+    // button press handlers
+    $document.keydown(function(event){
+      activate(event.keyCode);
+    });
+    $keys.mousedown(function(event){
+      activate($(event.target).data('key-code'));
     });
 
-    $(document).keyup(function(event){
-      var keyCode = event.keyCode;
-      if(keyMappings[keyCode]) {
-        keyMappings[keyCode].removeClass('active');
-      }
+    // button release handlers
+    $document.keyup(function(event){
+      deactivate(event.keyCode);
+    });
+    $keys.mouseup(function(event){
+      deactivate($(event.target).data('key-code'));
     });
   });
 </script>
@@ -61,6 +72,7 @@
     font-size: 100px;
     border: 1px solid black;
     display: inline-block;
+    cursor: pointer;
   }
 
   .key.active { background: lightblue; }
