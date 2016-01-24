@@ -5,8 +5,8 @@ var app = express();
 var port = process.env.PORT || 5000;
 var server = http.createServer(app);
 var webSocketServer = new WebSocketServer({ server: server });
-var redis = require("redis");
-var redisClient = redis.createClient();
+//var redis = require("redis");
+//var redisClient = redis.createClient();
 
 app.set('view engine', 'html');
 app.use(express.static(__dirname));
@@ -16,7 +16,7 @@ webSocketServer.on('connection', function(webSocket) {
     var parsedMessage = parseInt(message);
     if(parsedMessage) {
       console.log('from client:', parsedMessage);
-      redisClient.rpush('commands', parsedMessage);
+      //redisClient.rpush('commands', parsedMessage);
     }
   });
 });
