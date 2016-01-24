@@ -25,4 +25,8 @@ app.get('/', function(request, response) {
   response.sendFile('index.html');
 });
 
+app.get('/commands', function(request, response) {
+  response.send('wasd');
+});
+
 server.listen(port, function() { console.log('app is running on port', port); });
