@@ -13,14 +13,22 @@ Adafruit_CC3000 cc3000 = Adafruit_CC3000(ADAFRUIT_CC3000_CS, ADAFRUIT_CC3000_IRQ
 
 #define WLAN_SECURITY WLAN_SEC_WPA2
 
-#define WEBSITE "www.adafruit.com"
-#define WEBPAGE "/testwifi/index.html"
+#define WEBSITE "192.168.0.8"
+#define WEBPAGE "/commands"
+
+#define IDLE_TIMEOUT_MS  3000
+
+uint32_t ipAddress = cc3000.IP2U32(192, 168, 0, 8);
+Adafruit_CC3000_Client www;
 
 void setup(void)
 {
   Serial.begin(115200);
 
-  Serial.println("\nInitializing...");
+  Serial.println("Disconnecting");
+  cc3000.disconnect();
+
+  Serial.println("Initializing...");
   cc3000.begin();
 
   Serial.println("enter password");
@@ -32,20 +40,35 @@ void setup(void)
   char passChar[pass.length()];
   pass.toCharArray(passChar, (pass.length() + 1));
 
-  Serial.print("\nAttempting to connect to "); Serial.println(WLAN_SSID);
+  Serial.print("Attempting to connect to ");
+  Serial.println(WLAN_SSID);
   cc3000.connectToAP(WLAN_SSID, passChar, WLAN_SECURITY);
-
   Serial.println("Connected!");
-/*
-  // Wait for DHCP to complete 
-  Serial.println("Request DHCP");
-  cc3000.checkDHCP();
-*/
-  // You need to make sure to clean up after yourself or the CC3000 can freak out
-  // the next time your try to connect ...
-  Serial.println("\n\nDisconnecting");
-  cc3000.disconnect();
 }
 
 void loop(void){
+  www = cc3000.connectTCP(ipAddress, 5000);
+  if (www.connected()) {
+    www.fastrprint("GET ");
+    www.fastrprint(WEBPAGE);
+    www.fastrprint(" HTTP/1.1\r\n");
+    www.fastrprint("Host: "); www.fastrprint(WEBSITE); www.fastrprint("\r\n");
+    www.fastrprint("\r\n");
+    www.println();
+  }
+  else {
+    Serial.println("Connection failed");
+    return;
+  }
+
+  // Read data until either the connection is closed, or the idle timeout is reached.
+  unsigned long lastRead = millis();
+  while (www.connected() && (millis() - lastRead < IDLE_TIMEOUT_MS)) {
+    while (www.available()) {
+      char c = www.read();
+      Serial.print(c);
+      lastRead = millis();
+    }
+  }
+  www.close();
 }
