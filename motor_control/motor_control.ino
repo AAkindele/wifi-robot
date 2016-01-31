@@ -1,3 +1,4 @@
+/*
 #include <Adafruit_CC3000.h>
 #include <ccspi.h>
 #include <SPI.h>
@@ -20,11 +21,18 @@ Adafruit_CC3000 cc3000 = Adafruit_CC3000(ADAFRUIT_CC3000_CS, ADAFRUIT_CC3000_IRQ
 
 uint32_t ipAddress = cc3000.IP2U32(192, 168, 0, 8);
 Adafruit_CC3000_Client www;
+*/
+
+#include <AFMotor.h>
+#include <Servo.h>
+
+// DC motor on M2
+AF_DCMotor motor(2);
 
 void setup(void)
 {
   Serial.begin(115200);
-
+/*
   Serial.println("Disconnecting");
   cc3000.disconnect();
 
@@ -44,9 +52,14 @@ void setup(void)
   Serial.println(WLAN_SSID);
   cc3000.connectToAP(WLAN_SSID, passChar, WLAN_SECURITY);
   Serial.println("Connected!");
+  */
+
+  motor.setSpeed(200);
+  motor.run(RELEASE);
 }
 
 void loop(void){
+  /*
   www = cc3000.connectTCP(ipAddress, 5000);
   if (www.connected()) {
     www.fastrprint("GET ");
@@ -71,4 +84,24 @@ void loop(void){
     }
   }
   www.close();
+  */
+  while(Serial.available() > 0) {
+    processCommand(Serial.read());
+  }
 }
+
+int processCommand(char command) {
+  Serial.println(command);
+  if(command == 'w'){
+    motor.run(FORWARD);
+    motor.setSpeed(100);
+  }
+  else if(command == 's'){
+    motor.run(BACKWARD);
+    motor.setSpeed(100);
+  }
+  else if(command == '.'){
+    motor.setSpeed(0);
+  }
+}
+
